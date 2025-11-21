@@ -35,20 +35,24 @@
     position:relative; text-align:center;
   }
 
+  /* 📌 Logo arriba a la izquierda */
+  .logo {
+    width:80px;
+    position:absolute;
+    top:10px;
+    left:10px;
+  }
+
   .badge {
     position:absolute; top:14px; right:14px; font-size:11px; padding:4px 10px;
     background:var(--red); color:white; border-radius:999px; border:2px solid var(--gold);
     font-weight:600;
   }
 
-  .logo {
-    width:90px; margin:0 auto 8px; display:block;
-  }
-
   .icon {
     font-size:32px; background:var(--red); color:white; width:60px; height:60px;
     border-radius:999px; display:flex; align-items:center; justify-content:center;
-    margin:10px auto 8px; border:2px solid var(--gold);
+    margin:40px auto 8px; border:2px solid var(--gold);
   }
 
   h1 { font-size:19px; color:var(--red); font-weight:700; margin-bottom:2px; }
@@ -74,7 +78,7 @@
 
   @media(max-width:400px){
     .card{padding:16px;}
-    .logo{width:78px;}
+    .logo{width:65px;}
     .icon{width:52px;height:52px;font-size:27px;}
   }
 </style>
@@ -93,9 +97,9 @@
 </script>
 
 <div class="card">
-  <div class="badge">🎄 Privado</div>
+  <img class="logo" src="logo.png" alt="Colegio Tlahtoani">
 
-  <img class="logo" src="/mnt/data/logo.png" alt="Colegio Tlahtoani">
+  <div class="badge">🎄 Privado</div>
 
   <div class="icon">🔒</div>
 
