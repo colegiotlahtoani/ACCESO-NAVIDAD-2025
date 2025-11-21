@@ -12,12 +12,13 @@
 
   <style>
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --accent: #f97316;
-      --bg: #0f172a;
+      --primary: #b91c1c; /* rojo navideño */
+      --primary-dark: #7f1d1d;
+      --secondary: #0f5132; /* verde oscuro pino */
+      --gold: #d4af37;
+      --bg-dark: #0b0f16;
       --card-bg: #ffffff;
-      --danger: #dc2626;
+      --danger: #b91c1c;
       --muted: #6b7280;
       --radius-lg: 18px;
       --shadow-soft: 0 18px 35px rgba(15, 23, 42, 0.25);
@@ -30,20 +31,35 @@
     }
 
     body {
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at top, #1e293b 0, #020617 60%);
-      color: #0f172a;
+      font-family: "Inter", system-ui, sans-serif;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 16px;
+      background: linear-gradient(to bottom, #154734, #0c251c, #09130f 90%);
+      color: #0f172a;
+      position: relative;
+      overflow:hidden;
     }
 
-    .wrapper {
-      width: 100%;
-      max-width: 420px;
+    /* ❄️ Copos de nieve animados */
+    @keyframes snow {
+      0% { transform: translateY(-10px); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
     }
+
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      color: white;
+      font-size: 14px;
+      opacity: 0.8;
+      animation: snow linear infinite;
+    }
+
+    /* 📌 Tarjeta */
+    .wrapper { width: 100%; max-width: 420px; }
 
     .card {
       background: var(--card-bg);
@@ -52,55 +68,39 @@
       padding: 22px 20px 18px;
       position: relative;
       overflow: hidden;
+      border: 3px solid var(--primary);
+      background-image: url('https://i.ibb.co/1LW6LLJ/holly.png');
+      background-size: 180px;
+      background-repeat: no-repeat;
+      background-position: bottom right;
     }
 
     .badge-top {
       position: absolute;
-      top: 16px;
-      right: 16px;
-      font-size: 11px;
-      letter-spacing: .08em;
+      top: 16px; right: 16px;
+      font-size: 11px; letter-spacing: .08em;
       text-transform: uppercase;
-      background: rgba(37, 99, 235, 0.08);
-      color: var(--primary-dark);
-      padding: 4px 10px;
+      background: var(--primary);
+      color: white; padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(37, 99, 235, 0.22);
-      backdrop-filter: blur(8px);
+      border: 2px solid var(--gold);
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,.3);
     }
 
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
+    .header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 
     .icon-lock {
-      width: 44px;
-      height: 44px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      background: radial-gradient(circle at 30% 0, #bfdbfe 0, #2563eb 40%, #1e293b 100%);
-      color: #eff6ff;
-      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.4);
-      flex-shrink: 0;
+      width: 44px; height: 44px; border-radius: 999px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; color: #fff;
+      background: radial-gradient(circle at 30% 0, #ffd966 0, #b91c1c 60%, #7f1d1d 100%);
+      box-shadow: 0 10px 18px rgba(185, 28, 28, 0.4);
+      border: 2px solid var(--gold);
     }
 
-    .title-block h1 {
-      font-size: 20px;
-      line-height: 1.2;
-      color: #020617;
-      margin-bottom: 2px;
-    }
-
-    .title-block p {
-      font-size: 13px;
-      color: var(--muted);
-    }
+    .title-block h1 { font-size: 20px; line-height: 1.2; color: var(--primary-dark); margin-bottom: 2px; font-weight:700; }
+    .title-block p { font-size: 13px; color: var(--secondary); font-weight:600; }
 
     .alert {
       margin: 14px 0;
@@ -108,173 +108,84 @@
       border-radius: 12px;
       background: #fef2f2;
       border: 1px solid #fee2e2;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
+      display: flex; align-items: flex-start; gap: 8px;
     }
 
-    .alert-icon {
-      font-size: 16px;
-      color: var(--danger);
-      margin-top: 1px;
-    }
-
-    .alert-text {
-      font-size: 12px;
-      color: #7f1d1d;
-      line-height: 1.4;
-    }
+    .alert-icon { font-size: 16px; color: var(--danger); margin-top: 1px; }
+    .alert-text { font-size: 12px; color: var(--primary-dark); line-height: 1.4; }
 
     .status {
-      margin-top: 4px;
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: #fef2f2;
-      border: 1px dashed #fecaca;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: #b91c1c;
+      margin-top: 4px; padding: 8px 10px; border-radius: 10px;
+      background: #fef2f2; border: 1px dashed #fecaca;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--primary-dark);
     }
 
     .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: #ef4444;
+      width: 7px; height: 7px; border-radius: 999px;
+      background: var(--danger);
       box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.4);
       flex-shrink: 0;
     }
 
-    .section {
-      margin-top: 14px;
-      border-top: 1px dashed #e5e7eb;
-      padding-top: 12px;
-    }
-
+    .section { margin-top: 14px; border-top: 1px dashed #e5e7eb; padding-top: 12px; }
     .section h2 {
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: #6b7280;
-      margin-bottom: 8px;
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .12em;
+      color: var(--secondary); margin-bottom: 8px;
     }
 
-    .section p {
-      font-size: 13px;
-      color: #111827;
-      margin-bottom: 6px;
-      line-height: 1.5;
+    .section p, .section ul li {
+      font-size: 13px; color: #111827; margin-bottom: 6px; line-height: 1.45;
     }
 
-    .section ul {
-      padding-left: 18px;
-      margin: 4px 0 2px;
-    }
+    .section ul { padding-left: 18px; }
 
-    .section ul li {
-      font-size: 13px;
-      color: #111827;
-      margin-bottom: 4px;
-      line-height: 1.5;
-    }
-
-    .qr-meta {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 11px;
-      color: var(--muted);
-      flex-wrap: wrap;
-    }
-
-    .qr-meta span {
-      white-space: nowrap;
-    }
-
-    .btn-wrapper {
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .qr-meta { margin-top: 10px; display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); flex-wrap: wrap; }
 
     .btn-disabled {
-      width: 100%;
-      border-radius: 999px;
-      padding: 11px 14px;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: not-allowed;
-      background: #e5e7eb;
-      color: #6b7280;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      width: 100%; border-radius: 999px; padding: 11px 14px;
+      border: none; font-size: 13px; font-weight: 700;
+      cursor: not-allowed; color: #fff;
+      background: linear-gradient(90deg,#b91c1c,#861313);
+      box-shadow: 0 4px 10px rgba(185,28,28,0.4);
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 2px solid var(--gold);
     }
 
-    .btn-disabled span.icon {
-      font-size: 14px;
-    }
-
-    .hint-text {
-      font-size: 11px;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .footer {
-      margin-top: 14px;
-      padding-top: 10px;
-      border-top: 1px dashed #e5e7eb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .footer-left {
-      font-size: 11px;
-      color: #6b7280;
-    }
-
-    .footer-right {
-      font-size: 10px;
-      text-align: right;
-      color: #9ca3af;
-    }
-
-    .brand {
-      font-weight: 600;
-      color: var(--primary-dark);
-    }
+    .hint-text { font-size: 11px; color: var(--muted); text-align: center; }
+    .footer { margin-top: 14px; padding-top: 10px; border-top: 1px dashed #e5e7eb; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .footer-left { font-size: 11px; color: var(--secondary); font-weight:600; }
+    .footer-right { font-size: 10px; text-align: right; color: var(--muted); }
+    .brand { font-weight: 700; color: var(--primary-dark); }
 
     @media (max-width: 360px) {
-      .card {
-        padding: 18px 16px 14px;
-      }
-
-      .title-block h1 {
-        font-size: 18px;
-      }
-
-      .icon-lock {
-        width: 40px;
-        height: 40px;
-        font-size: 22px;
-      }
+      .card { padding: 18px 16px 14px; }
+      .title-block h1 { font-size: 18px; }
+      .icon-lock { width: 40px; height: 40px; font-size: 22px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ❄️ Copos de nieve -->
+  <script>
+    for (let i = 0; i < 16; i++) {
+      const snow = document.createElement("div");
+      snow.className = "snowflake";
+      snow.innerHTML = "❄";
+      snow.style.left = Math.random() * 100 + "vw";
+      snow.style.animationDuration = 5 + Math.random() * 5 + "s";
+      snow.style.fontSize = 10 + Math.random() * 16 + "px";
+      snow.style.opacity = Math.random();
+      document.body.appendChild(snow);
+    }
+  </script>
+
   <div class="wrapper">
     <div class="card">
-      <div class="badge-top">Acceso privado</div>
+
+      <div class="badge-top">Acceso privado 🎄</div>
 
       <div class="header">
         <div class="icon-lock">🔒</div>
@@ -287,20 +198,18 @@
       <div class="alert">
         <div class="alert-icon">⚠️</div>
         <div class="alert-text">
-          Este código QR es <strong>de uso exclusivo</strong> del sistema de control de acceso.
+          Este código QR es <strong>de uso exclusivo</strong> del sistema de control de acceso navideño.
           No puede ser validado desde dispositivos personales.
         </div>
       </div>
 
       <div class="status">
         <div class="status-dot"></div>
-        <div>
-          <strong>Estado:</strong> No validado — Escáner externo detectado.
-        </div>
+        <div><strong>Estado:</strong> No validado — Escáner externo detectado.</div>
       </div>
 
       <div class="section">
-        <h2>Indicaciones para el asistente</h2>
+        <h2>🎁 Indicaciones para el asistente</h2>
         <p>
           Para que este código QR sea válido, deberás
           <strong>mostrarlo al personal del evento</strong> al momento de ingresar.
@@ -308,44 +217,36 @@
         <ul>
           <li>Ten tu código QR listo en tu celular o impreso.</li>
           <li>Muéstralo únicamente al personal autorizado en el acceso.</li>
-          <li>Ellos utilizarán el <strong>lector oficial del evento</strong> para validarlo.</li>
+          <li>Ellos usarán el <strong>lector oficial del evento</strong> para validarlo.</li>
         </ul>
       </div>
 
       <div class="section">
-        <h2>Importante</h2>
+        <h2>🎄 Importante</h2>
         <p>
           Este QR <strong>no está diseñado para mostrar información al público</strong>.
           Su lectura correcta solo se realiza con el escáner autorizado del sistema.
         </p>
-        <p>
-          No compartas capturas de pantalla ni reenvíes este código a otras personas.
-        </p>
+        <p>Evita compartir capturas o reenviar este código.</p>
       </div>
 
       <div class="qr-meta">
         <span>Tipo: QR privado</span>
-        <span>ID interno: EVT-QR-042</span>
+        <span>ID interno: XMAS-QR-042</span>
       </div>
 
       <div class="btn-wrapper">
         <button class="btn-disabled" disabled>
-          <span class="icon">📡</span>
-          Validar código QR (solo escáner autorizado)
+          📡 Validar código QR (solo escáner autorizado)
         </button>
-        <p class="hint-text">
-          Si estás viendo esta página desde tu celular, significa que el código fue
-          escaneado fuera del sistema de validación.
-        </p>
+        <p class="hint-text">Si estás viendo esta página en tu celular, significa que el código fue escaneado fuera del sistema.</p>
       </div>
 
       <div class="footer">
-        <div class="footer-left">
-          Mostrar este código al ingresar al evento.
-        </div>
+        <div class="footer-left">🎅 Mostrar este código al ingresar al evento.</div>
         <div class="footer-right">
           Sistema de Control de Acceso<br />
-          <span class="brand">Eventos Inteligentes</span>
+          <span class="brand">Evento Navideño</span>
         </div>
       </div>
     </div>
