@@ -25,7 +25,6 @@
     display:flex; align-items:center; justify-content:center; min-height:100vh;
     overflow:hidden;
   }
-  /* ❄ Snowflakes */
   @keyframes snow{0%{transform:translateY(-10px);opacity:1;}100%{transform:translateY(110vh);opacity:0;}}
   .snowflake{position:absolute;top:-10px;color:white;animation:snow linear infinite;}
 
@@ -35,13 +34,7 @@
     position:relative; text-align:center;
   }
 
-  /* 📌 Logo arriba a la izquierda */
-  .logo {
-    width:80px;
-    position:absolute;
-    top:10px;
-    left:10px;
-  }
+  .logo { width:80px; position:absolute; top:10px; left:10px; }
 
   .badge {
     position:absolute; top:14px; right:14px; font-size:11px; padding:4px 10px;
@@ -57,6 +50,13 @@
 
   h1 { font-size:19px; color:var(--red); font-weight:700; margin-bottom:2px; }
   p.subtitle { font-size:13px; color:var(--green); margin-bottom:12px; font-weight:600; }
+
+  /* 🔐 Texto agregado de boleto único */
+  .unique {
+    font-size:12px; color:#7f1d1d; font-weight:600;
+    background:#fef2f2; border:1px dashed #fecaca;
+    padding:6px 10px; border-radius:10px; margin-bottom:14px;
+  }
 
   .alert {
     font-size:13px; background:#fef2f2; border:1px solid #fecaca; color:var(--red);
@@ -106,7 +106,9 @@
   <h1>Festival Navideño Tlahtoani</h1>
   <p class="subtitle">Acceso mediante código QR</p>
 
-  <div class="alert">Este código solo puede ser validado por el personal del evento.</div>
+  <div class="unique">🎟️ Este es un <strong>boleto único e individual</strong>.</div>
+
+  <div class="alert">Solo puede ser validado por el personal del evento.</div>
 
   <div class="note">📌 Presenta este QR en la entrada para su validación oficial.</div>
 
