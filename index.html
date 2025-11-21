@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Acceso al Evento</title>
+<title>Acceso al Festival</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,39 +28,53 @@
   /* ❄ Snowflakes */
   @keyframes snow{0%{transform:translateY(-10px);opacity:1;}100%{transform:translateY(110vh);opacity:0;}}
   .snowflake{position:absolute;top:-10px;color:white;animation:snow linear infinite;}
+
   .card {
     width:100%; max-width:380px; background:var(--card); border-radius:16px;
     border:3px solid var(--red); padding:20px; box-shadow:0 15px 35px rgba(0,0,0,.35);
     position:relative; text-align:center;
   }
+
   .badge {
     position:absolute; top:14px; right:14px; font-size:11px; padding:4px 10px;
     background:var(--red); color:white; border-radius:999px; border:2px solid var(--gold);
     font-weight:600;
   }
+
+  .logo {
+    width:90px; margin:0 auto 8px; display:block;
+  }
+
   .icon {
     font-size:32px; background:var(--red); color:white; width:60px; height:60px;
     border-radius:999px; display:flex; align-items:center; justify-content:center;
-    margin:0 auto 8px; border:2px solid var(--gold);
+    margin:10px auto 8px; border:2px solid var(--gold);
   }
-  h1 { font-size:19px; color:var(--red); font-weight:700; margin-bottom:3px; }
+
+  h1 { font-size:19px; color:var(--red); font-weight:700; margin-bottom:2px; }
   p.subtitle { font-size:13px; color:var(--green); margin-bottom:12px; font-weight:600; }
+
   .alert {
     font-size:13px; background:#fef2f2; border:1px solid #fecaca; color:var(--red);
     padding:8px 10px; border-radius:10px; margin-bottom:14px;
   }
+
   .note {
     font-size:12px; padding:10px; background:#fff7e6; border:1px solid #fde68a;
     border-radius:10px; color:#b45309; text-align:center; margin-bottom:14px;
   }
+
   button {
     width:100%; padding:12px; border-radius:999px; background:var(--red); color:white;
     font-weight:600; font-size:13px; border:2px solid var(--gold); cursor:not-allowed;
     box-shadow:0 4px 10px rgba(185,28,28,0.4);
   }
+
   .footer { font-size:11px; color:var(--muted); margin-top:12px; }
+
   @media(max-width:400px){
     .card{padding:16px;}
+    .logo{width:78px;}
     .icon{width:52px;height:52px;font-size:27px;}
   }
 </style>
@@ -79,11 +93,14 @@
 </script>
 
 <div class="card">
-  <div class="badge">🎄 Acceso</div>
+  <div class="badge">🎄 Privado</div>
+
+  <img class="logo" src="/mnt/data/logo.png" alt="Colegio Tlahtoani">
+
   <div class="icon">🔒</div>
 
-  <h1>Ingreso al Evento</h1>
-  <p class="subtitle">Código QR Privado</p>
+  <h1>Festival Navideño Tlahtoani</h1>
+  <p class="subtitle">Acceso mediante código QR</p>
 
   <div class="alert">Este código solo puede ser validado por el personal del evento.</div>
 
