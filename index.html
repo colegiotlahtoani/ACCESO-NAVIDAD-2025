@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso de familias</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --success: #059669;
+      --error: #dc2626;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 32px 24px 56px;
+      text-align: center;
+    }
+
+    h1 { margin: 0; font-size: 32px; font-weight: 700; }
+
+    main {
+      max-width: 960px;
+      margin: -48px auto 48px;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      text-transform: uppercase;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      background: var(--primary);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:hover { background: var(--primary-dark); }
+    button:active { transform: translateY(1px); }
+
+    .secondary-btn {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .result {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #f1f5f9;
+    }
+
+    .result.visible {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      align-items: center;
+    }
+
+    .status {
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status.success {
+      color: var(--success);
+      background: rgba(5, 150, 105, 0.08);
+      border: 1px solid rgba(5, 150, 105, 0.2);
+    }
+
+    .status.error {
+      color: var(--error);
+      background: rgba(220, 38, 38, 0.08);
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+
+    .qr-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .code-display {
+      font-family: monospace;
+      font-size: 20px;
+      letter-spacing: 4px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 24px;
+      font-size: 14px;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <h1>Ingreso de familias al evento</h1>
+    <p>Introduce el código de 4 caracteres que recibiste para obtener tu acceso.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <label for="family-code">Código de familia</label>
+      <input id="family-code" type="text" maxlength="4" placeholder="Ej. A7F3">
+
+      <p class="helper-text" style="color: var(--muted); font-size:14px;">
+        Debe tener <strong>4 caracteres en MAYÚSCULAS</strong> (letras y números).
+      </p>
+
+      <div class="actions">
+        <button id="submit-btn">Ver acceso</button>
+        <button id="reset-btn" class="secondary-btn">Limpiar</button>
+      </div>
+
+      <div id="result" class="result">
+        <div>
+          <div id="status" class="status"></div>
+          <p id="detail"></p>
+        </div>
+
+        <div id="qr" class="qr-wrapper" style="display:none;">
+          <canvas id="qr-canvas" width="220" height="220"></canvas>
+          <div id="code-display" class="code-display"></div>
+          <small style="color: var(--muted);">Muestra este código en la entrada.</small>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>Plataforma interna de control de accesos del colegio.</footer>
+
+  <script>
+    /* === 600 IDs válidos === */
+    const validCodes = new Set([
+      '01W7','02Y2','03BN','083C','0B92','0BMA','0D8Z','0DHH','0FLD','0JVN','0O3T','0OD8',
+      '0OJ4','0QS1','0SZZ','127N','13MN','14OA','178X','1AUG','1FFV','1KQV','1LEP','1MM9',
+      '1R10','1VKT','1XEL','1Y0F','1ZDD','2150','231L','26IK','27XJ','289G','294P','2A7F',
+      '2C3V','2EE8','2F68','2H9O','2IEU','2KSG','2OZF','2SV7','2TBB','2Y0E','2YFM','2YR6',
+      '308Z','30B0','32NB','32WD','34VQ','35F9','3AW1','3EZ6','3F1R','3F3B','3G08','3G8I',
+      '3HFT','3IJN','3JCZ','3JBJ','3KLE','3N0U','3O3E','3O4G','3O8B','3REN','3SBW','3TFH',
+      '3TIS','3WK3','3WNE','3Y6H','40M3','410F','43C3','44YN','45B1','46FX','47ZN','48GG',
+      '4934','4BRA','4E1K','4F10','4H1I','4H2Z','4IGC','4JGZ','4K6Z','4LP9','4MDM','4MYY',
+      '4NU3','4P3V','4QGQ','4QT5','4RP6','4S4Q','4T0K','4THO','4W3O','4WRU','4XGU','4Y0G',
+      '4YML','5081','50D6','513V','52JI','53DT','54RZ','565Y','56M8','57GR','57MR','57L1',
+      '5A0G','5AD1','5ARI','5DKP','5DU2','5HS5','5I1N','5K5G','5L3X','5M0Q','5ND7','5NDR',
+      '5OEF','5OYY','5QOF','5R64','5S3X','5T7N','5ULI','5V4L','5Y55','5ZOE','60LG','614P',
+      '61CE','61MW','62N3','62S9','64SB','65RX','673V','67IK','69IC','69WX','6A1E','6A1Z',
+      '6B6U','6C7T','6D3J','6D4R','6DRD','6G46','6G5I','6H9M','6HIO','6JND','6KQG','6KXC',
+      '6LWX','6M0M','6N2Q','6N3Y','6N6I','6N9U','6O9B','6PZM','6QHA','6QUK','6S2E','6T3I',
+      '6T6V','6VOB','6WTE','6X3L','6X7P','700T','70VE','71AC','72CQ','7352','73YW','74JW',
+      '75TT','76NL','76T8','77CR','77P8','78GI','78ZO','7AE7','7B7D','7BV6','7C87','7CFX',
+      '7EYP','7FBQ','7FNR','7IY7','7J45','7JFZ','7JUF','7K20','7K3C','7KK6','7L27','7L3D',
+      '7LC0','7MG2','7MGP','7MZ5','7NLI','7O1J','7PYY','7Q8F','7RG9','7ROD','7SFD','7T7H',
+      '7TGI','7U85','7VWM','7WAH','7WTI','7YSH','801L','809W','81CN','81QY','8220','825C',
+      '82N7','83KN','83LM','84Q7','85IG','85J6','86AW','87XD','88SP','8A0U','8A1T','8C2Z',
+      '8C71','8D1V','8D2X','8D5M','8D92','8E8T','8ECY','8EY2','8F67','8FGQ','8G4E','8G4P',
+      '8H3J','8H7Z','8H9F','8HAX','8I7P','8J1A','8J2G','8J4O','8K0O','8KX2','8L8R','8LXL',
+      '8M8X','8N6F','8NEG','8NPG','8NS2','8O17','8O3Q','8O9B','8OT4','8P1Y','8P6U','8P7Q',
+      '8Q0X','8QLQ','8R3Q','8R8D','8R9D','8S03','8S3F','8SC3','8T54','8TQ0','8U6B','8V01',
+      '8V2D','8V2U','8W9N','8WQL','8WWB','8X4K','8X8I','8Y2N','8YC8','8Z38','8ZGW','8ZKC',
+      '901N','90X7','9180','91F1','91JT','91L3','91SU','92TG','93L7','93V7','94ED','94W6',
+      '95F9','95T8','96HL','97V6','980H','986E','98QG','98W7','98WE','99DR','99LK','9A2O',
+      '9A3Z','9A7E','9BCI','9BG6','9BHH','9DTF','9DYY','9EQ4','9F8L','9FBZ','9FMV','9FQH',
+      '9G41','9GDV','9H3G','9H5F','9HH3','9IE7','9IY5','9J4I','9JNW','9K2E','9K3U','9K90',
+      '9KQ7','9L5B','9LCP','9MMP','9N0M','9N85','9NJO','9O52','9OMX','9P1P','9P2H','9Q0J',
+      '9Q8E','9QK4','9QKT','9R7C','9R9V','9RA5','9S7L','9SV2','9T78','9TFF','9TL8','9U0O',
+      '9U3S','9U4O','9UEJ','9UYS','9V34','9V6K','9VQP','9VWN','9W73','9WZ0','9XKC','9XWF',
+      '9Y3L','9YB2','9YNN','9Z6H','9Z7N','9Z82','A1JP','A1OW','A2V1','A3L8','A3RS','A3XK',
+      'A4D5','A4FB','A4NN','A5V5','A6CQ','A7VZ','A8GG','A8L0','A8R7','A8T1','A9H6','AA0W',
+      'AB1J','AB3V','AB4N','AB7R','AB8A','ABQ9','AC0K','AC3G','ACM3','AD1I','AD4Y','AD9T',
+      'ADQ0','AEEI','AEPY','AF6I','AF70','AF8H','AG2O','AG3Y','AG8R','AGTD','AH03','AH78',
+      'AH9W','AHJG','AHMP','AI7S','AJ4N','AJ9Q','AJN9','AK2U','AK3R','AK4V','AKOH','AL0Z',
+      'AL8K','AL96','ALJY','ALM6','AM1C','AM8Y','AMQF','AN4T','AN5E','AN60','AN6J','AN9D',
+      'ANJL','ANMN','ANSM','AO19','AO8T','AOUN','AP0K','AP3S','AP9H','AQCQ','AQQ7','AR8I',
+      'ARF9','AS8P','AS9M','ASIR','AT05','AT5M','AT6B','AU1X','AUE6','AUWQ','AV8E','AVNS',
+      'AW37','AWJZ','AX2G','AXFU','AY4K','AY9I','AYLZ','AZ1S','AZ1V','AZF3'
+    ]);
+
+    const codeInput = document.getElementById("family-code");
+    const submitBtn = document.getElementById("submit-btn");
+    const resetBtn  = document.getElementById("reset-btn");
+    const result    = document.getElementById("result");
+    const statusEl  = document.getElementById("status");
+    const detailEl  = document.getElementById("detail");
+    const qrWrapper = document.getElementById("qr");
+    const qrCanvas  = document.getElementById("qr-canvas");
+    const codeDisplay = document.getElementById("code-display");
+
+    const qr = new QRious({ element: qrCanvas, value: "", size: 220, level: "M" });
+
+    function sanitize(code){
+      return code.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,4);
+    }
+
+    function showResult(ok, code){
+      result.classList.add("visible");
+
+      if(ok){
+        statusEl.className = "status success";
+        statusEl.textContent = "Código válido";
+        detailEl.textContent = "Conserva este QR para entrar al evento.";
+
+        qrWrapper.style.display = "flex";
+        codeDisplay.textContent = code;
+        qr.set({ value: code });
+      } else {
+        statusEl.className = "status error";
+        statusEl.textContent = "Código no encontrado";
+        detailEl.textContent = "Verifica el código recibido.";
+
+        qrWrapper.style.display = "none";
+        codeDisplay.textContent = "";
+        qr.set({ value: "" });
+      }
+    }
+
+    submitBtn.onclick = () => {
+      const code = sanitize(codeInput.value);
+      codeInput.value = code;
+
+      if(code.length !== 4) return showResult(false);
+
+      showResult(validCodes.has(code), code);
+    };
+
+    resetBtn.onclick = () => {
+      codeInput.value = "";
+      result.classList.remove("visible");
+      qrWrapper.style.display = "none";
+      statusEl.textContent = "";
+      detailEl.textContent = "";
+      qr.set({ value: "" });
+    };
+
+    codeInput.addEventListener("keyup", e => { if(e.key === "Enter") submitBtn.onclick(); });
+  </script>
+</body>
+</html>
